@@ -71,7 +71,9 @@ class Subscription(BaseModel):
     
     # PayPlus integration
     payplus_recurring_uid: Optional[str] = Field(None, description="PayPlus recurring payment UID")
-    payment_method_id: Optional[str] = Field(None, description="Payment method ID used")
+    payplus_card_token: Optional[str] = Field(None, description="PayPlus saved card UID")
+    page_request_uid: Optional[str] = Field(None, description="PayPlus payment page request UID")
+    payment_page_link: Optional[str] = Field(None, description="PayPlus payment page URL")
     
     # Status
     status: SubscriptionStatus = Field(default=SubscriptionStatus.INCOMPLETE)

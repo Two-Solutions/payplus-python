@@ -11,10 +11,11 @@ from typing import Any, Optional
 
 import httpx
 
+from payplus.api.customers import CustomersAPI
+from payplus.api.payment_pages import PaymentPagesAPI
 from payplus.api.payments import PaymentsAPI
 from payplus.api.recurring import RecurringAPI
 from payplus.api.transactions import TransactionsAPI
-from payplus.api.payment_pages import PaymentPagesAPI
 from payplus.exceptions import PayPlusError, PayPlusAPIError, PayPlusAuthError
 
 
@@ -72,6 +73,7 @@ class PayPlus:
         self._async_client: Optional[httpx.AsyncClient] = None
         
         # API endpoints
+        self.customers = CustomersAPI(self)
         self.payments = PaymentsAPI(self)
         self.recurring = RecurringAPI(self)
         self.transactions = TransactionsAPI(self)
