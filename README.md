@@ -1,4 +1,6 @@
-# PayPlus Python SDK
+# PayPlus Python SDK (Unofficial)
+
+> **Note:** This is an unofficial SDK and is not affiliated with or endorsed by PayPlus.
 
 A Python SDK for [PayPlus](https://www.payplus.co.il/) payment gateway with built-in subscription management for SaaS applications.
 

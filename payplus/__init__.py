@@ -12,7 +12,7 @@ from payplus.models.subscription import (
 from payplus.models.tier import Tier
 from payplus.subscriptions.manager import SubscriptionManager
 
-__version__ = "0.2.0"
+__version__ = "0.2.1"
 __all__ = [
     "PayPlus",
     "SubscriptionManager",
