@@ -244,7 +244,7 @@ class WebhookHandler:
             transaction_type=data.get("transaction_type"),
             status_code=transaction.get("status_code"),
             approval_number=transaction.get("approval_number"),
-            page_request_uid=transaction.get("payment_request_uid"),
+            page_request_uid=transaction.get("payment_page_request_uid") or transaction.get("payment_request_uid"),
             recurring_uid=recurring_info.get("recurring_uid"),
             charge_uid=recurring_info.get("charge_uid"),
             amount=transaction.get("amount"),

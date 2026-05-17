@@ -154,9 +154,6 @@ class Tier(BaseModel):
     def get_limit(self, key: str, default: Any = None) -> Any:
         """Get a resource limit."""
         return self.limits.get(key, default)
-    
-    class Config:
-        use_enum_values = True
 
 
 # Preset tier templates

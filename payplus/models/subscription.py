@@ -190,6 +190,3 @@ class Subscription(BaseModel):
         self.tier_id = new_tier_id
         self.amount = new_amount
         self.updated_at = datetime.utcnow()
-    
-    class Config:
-        use_enum_values = True

@@ -230,16 +230,21 @@ class RecurringAPI(BaseAPI):
     def cancel(self, recurring_uid: str) -> dict[str, Any]:
         """
         Cancel a recurring payment.
-        
+
+        PayPlus has no dedicated `Cancel` endpoint. The documented mechanism is
+        to call `POST /RecurringPayments/{uid}/Valid` with `valid=false`, which
+        marks the recurring as invalid so PayPlus stops charging it.
+
         Args:
             recurring_uid: Recurring payment UID
-            
+
         Returns:
-            Cancellation result
+            API response
         """
-        return self._request("POST", "RecurringPayments/Cancel", {
-            "recurring_uid": recurring_uid,
-        })
+        data: dict[str, Any] = {"valid": False}
+        if self._client.terminal_uid:
+            data["terminal_uid"] = self._client.terminal_uid
+        return self._request("POST", f"RecurringPayments/{recurring_uid}/Valid", data)
     
     def get(self, recurring_uid: str) -> dict[str, Any]:
         """
