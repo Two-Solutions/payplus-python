@@ -154,6 +154,7 @@ class SubscriptionManager:
         number_of_charges: int = 0,
         payment_page_uid: Optional[str] = None,
         metadata: Optional[dict[str, Any]] = None,
+        language: str = "he",
     ) -> Subscription:
         """
         Create a subscription by generating a PayPlus payment link with recurring settings.
@@ -226,6 +227,7 @@ class SubscriptionManager:
             failure_url=failure_url,
             cancel_url=cancel_url,
             recurring_settings=recurring_settings,
+            language=language,
             **link_kwargs,
         )
 
@@ -236,7 +238,8 @@ class SubscriptionManager:
 
         # Calculate period end
         now = datetime.utcnow()
-        interval, interval_count = tier.billing_cycle.to_interval()
+        tier_cycle = tier.billing_cycle if isinstance(tier.billing_cycle, BillingCycle) else BillingCycle(tier.billing_cycle)
+        interval, interval_count = tier_cycle.to_interval()
         period_end = self._calculate_period_end(now, interval, interval_count)
 
         initial_status = SubscriptionStatus.INCOMPLETE
@@ -476,7 +479,8 @@ class SubscriptionManager:
             else:
                 # Renewal — advance period
                 subscription.mark_payment_succeeded()
-                interval, interval_count = subscription.billing_cycle.to_interval()
+                sub_cycle = subscription.billing_cycle if isinstance(subscription.billing_cycle, BillingCycle) else BillingCycle(subscription.billing_cycle)
+                interval, interval_count = sub_cycle.to_interval()
                 subscription.current_period_start = subscription.current_period_end
                 subscription.current_period_end = self._calculate_period_end(
                     subscription.current_period_start, interval, interval_count

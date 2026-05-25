@@ -4,6 +4,7 @@ PayPlus API Client - Core HTTP client for PayPlus payment gateway.
 
 from __future__ import annotations
 
+import base64
 import hashlib
 import hmac
 import json
@@ -178,20 +179,30 @@ class PayPlus:
     ) -> bool:
         """
         Verify webhook/IPN signature.
-        
+
+        PayPlus sends HMAC-SHA256 base64-encoded in the `hash` header.
+        Hex is accepted as a fallback for terminals/configurations that emit hex.
+
         Args:
             payload: Raw request body
-            signature: Signature from X-PayPlus-Signature header
-            
+            signature: Signature from the `hash` header (or equivalent)
+
         Returns:
             True if signature is valid
         """
-        expected = hmac.new(
+        if not signature:
+            return False
+        digest = hmac.new(
             self.secret_key.encode(),
             payload,
             hashlib.sha256,
-        ).hexdigest()
-        return hmac.compare_digest(expected, signature)
+        ).digest()
+        expected_b64 = base64.b64encode(digest).decode()
+        expected_hex = digest.hex()
+        return (
+            hmac.compare_digest(expected_b64, signature)
+            or hmac.compare_digest(expected_hex, signature)
+        )
     
     def close(self) -> None:
         """Close HTTP clients."""
